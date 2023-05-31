@@ -19,15 +19,16 @@ while (continuar){
         consultarSaldo(saldo);
         break;
         case 2:
-        let retirarDinero = prompt(parseInt("Ingrese monto a retirar"));
-        retirarDinero(retirarDinero, saldo)
-        break;
-        case 3:
-        let depositardinero = prompt(parseInt("Ingrese monto a depositar."));
-        depositardinero(depositardinero, saldo)
-        break;
+            let montoRetiro = parseInt(prompt("Ingrese monto a retirar"));
+            retirarDinero(montoRetiro, saldo);
+            break;
+          case 3:
+            let montoDeposito = parseInt(prompt("Ingrese monto a depositar."));
+            depositarDinero(montoDeposito, saldo);
+            break;
         case 4:
         continuar = false;
+        break;
         default:
             alert("Opcion invalida.")
             break;
@@ -38,7 +39,7 @@ function mostrarMenu() {
 alert("Bienvenido Bancoder\n selecione una de las opciones \n 1- consulte su saldo \n 2- retire dinero \n 3- deposite dinero \n 4-salir ")
 }
 
-function retirarDinero(monto,saldo) {
+function retirarDinero(monto) {
     if (monto <= saldo ) {
         saldo -= monto ;
         alert("retiro de saldo exitoso, su saldo restante es : " + saldo);
@@ -47,8 +48,8 @@ function retirarDinero(monto,saldo) {
   }
 }
 
-function depositardinero(monto,saldo) {
+function depositarDinero(monto) {
 saldo += monto;
-alert("Su saldo es = " + monto);
+alert("Su saldo es = " + saldo);
 
 }
