@@ -6,9 +6,7 @@ let ingreseContraseña = prompt("Ingrese contraseña:");
 
 if (parseInt(ingreseContraseña) === contraseña) {
   alert("Contraseña correcta");
-} else {
-  alert("Contraseña incorrecta");
-}
+
 
 while (continuar){
     mostrarMenu();
@@ -27,7 +25,7 @@ while (continuar){
             depositarDinero(montoDeposito, saldo);
             break;
         case 4:
-        continuar = false;
+      continuar = salir()
         break;
         default:
             alert("Opcion invalida.")
@@ -53,3 +51,25 @@ saldo += monto;
 alert("Su saldo es = " + saldo);
 
 }
+
+function consultarSaldo(saldo) {
+    alert("Su saldo es = " + saldo);
+}
+
+function salir() {
+    let respuesta;
+    do {
+      respuesta = prompt("¿Seguro que desea salir? elegir si o no.").toLowerCase();
+      if (respuesta === "si") {
+        return false; 
+      } else if (respuesta === "no") {
+        return true;
+      } else {
+        alert("La opción ingresada no es correcta. Por favor, ingrese 'si' o 'no'.");
+      }
+    } while (true);
+  }
+
+} else {
+    alert("Contraseña incorrecta");
+  }
