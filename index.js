@@ -1,10 +1,14 @@
-let saldo = 1000;
-let contraseña = 2020;
-let continuar = true
+let cuenta = {
+  saldo: 1000,
+  contraseña: 2020,
+  historialMovimientos: []
+};
+
+let continuar = true;
 
 let ingreseContraseña = prompt("Ingrese contraseña:");
 
-if (parseInt(ingreseContraseña) === contraseña) {
+if (parseInt(ingreseContraseña) === cuenta.contraseña) {
   alert("Contraseña correcta");
 
 
@@ -14,15 +18,15 @@ while (continuar){
     
     switch(opcion) {
         case 1: 
-        consultarSaldo(saldo);
+        consultarSaldo(cuenta.saldo);
         break;
         case 2:
             let montoRetiro = parseInt(prompt("Ingrese monto a retirar"));
-            retirarDinero(montoRetiro, saldo);
+            retirarDinero(montoRetiro, cuenta.saldo);
             break;
           case 3:
             let montoDeposito = parseInt(prompt("Ingrese monto a depositar."));
-            depositarDinero(montoDeposito, saldo);
+            depositarDinero(montoDeposito, cuenta.saldo);
             break;
         case 4:
       continuar = salir()
@@ -38,23 +42,34 @@ alert("Bienvenido Bancoder\n selecione una de las opciones \n 1- consulte su sal
 }
 
 function retirarDinero(monto) {
-    if (monto <= saldo ) {
-        saldo -= monto ;
-        alert("retiro de saldo exitoso, su saldo restante es : " + saldo);
-  }else {
-    alert("saldo insuficiente")
+  if (monto <= cuenta.saldo) {
+    cuenta.saldo -= monto;
+    alert("Retiro de saldo exitoso, su saldo restante es: " + cuenta.saldo);
+    cuenta.historialMovimientos.push({
+      tipo: "retiro",
+      monto: monto,
+      saldoActual: cuenta.saldo
+    });
+  } else {
+    alert("Saldo insuficiente");
   }
 }
 
+
 function depositarDinero(monto) {
-saldo += monto;
-alert("Su saldo es = " + saldo);
-
+  cuenta.saldo += monto;
+  alert("Su saldo es = " + cuenta.saldo);
+  cuenta.historialMovimientos.push({
+    tipo: "depósito",
+    monto: monto,
+    saldoActual: cuenta.saldo
+  });
 }
 
-function consultarSaldo(saldo) {
-    alert("Su saldo es = " + saldo);
+function consultarSaldo() {
+  alert("Su saldo es = " + cuenta.saldo);
 }
+
 
 function salir() {
     let respuesta;
@@ -68,6 +83,17 @@ function salir() {
         alert("La opción ingresada no es correcta. Por favor, ingrese 'si' o 'no'.");
       }
     } while (true);
+  }
+
+  for (let i = 0; i < cuenta.historialMovimientos.length; i++) {
+    let movimiento = cuenta.historialMovimientos[i];
+    let mensaje = "";
+    if (movimiento.tipo === "retiro") {
+      mensaje = "Retiro de saldo: " + movimiento.monto + ", saldo restante: " + movimiento.saldoActual;
+    } else if (movimiento.tipo === "depósito") {
+      mensaje = "Depósito de saldo: " + movimiento.monto + ", saldo actual: " + movimiento.saldoActual;
+    }
+    alert(mensaje);
   }
 
 } else {
