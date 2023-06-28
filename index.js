@@ -3,114 +3,232 @@ let cuenta = {
   contraseña: 2020,
   historialMovimientos: []
 };
-
 let continuar = true;
+let passwordInput = document.getElementById("password-input");
+let saldoActualDiv = document.getElementById("saldo-actual");
+let opcionDiv = document.getElementById("opcion-div");
+let saldoAnteriorDiv = document.getElementById("saldo-anterior");
+let modo = "ingresoContraseña";
 
-let ingreseContraseña = prompt("Ingrese contraseña:");
+function mostrarMenu() {
+  modo = "mostrarMenu"; // Cambiar el modo a "mostrarMenu"
+  opcionDiv.innerHTML = `
+      <li>
+          <li class="menus">1-Consultar saldo</li>
+          <li class="menus">2-Retirar dinero</li>
+          <li class="menus">3-Depositar dinero</li>
+        </ul>  `;
+}
 
-if (parseInt(ingreseContraseña) === cuenta.contraseña) {
-  alert("Contraseña correcta");
+function ocultarMenu() {
+  opcionDiv.innerHTML = "";
+}
 
-  function mostrarMenu() {
-    alert("Bienvenido Bancoder\nSeleccione una de las opciones:\n1- Consultar saldo\n2- Retirar dinero\n3- Depositar dinero\n4- Salir");
-  }
+function mostrarRetirar() {
+  modo = "retirarDinero";
+  opcionDiv.innerHTML = `
+      <input type="number" placeholder="Ingrese el monto a retirar">
+      <button onclick="retirarDinero()">Confirmar Retiro</button>
+    `;
+}
 
-  function retirarDinero(monto) {
-    if (monto <= cuenta.saldo) {
-      cuenta.saldo -= monto;
-      alert("Retiro de saldo exitoso. Su saldo restante es: " + cuenta.saldo);
-      cuenta.historialMovimientos.push({
-        tipo: "retiro",
-        monto: monto,
-        saldoActual: cuenta.saldo
-      });
-    } else {
-      alert("Saldo insuficiente");
-    }
-  }
-
-  function depositarDinero(monto) {
-    cuenta.saldo += monto;
-    alert("Depósito de saldo exitoso. Su saldo es: " + cuenta.saldo);
+function retirarDinero() {
+  let monto = parseInt(opcionDiv.querySelector("input").value);
+  if (monto <= cuenta.saldo) {
+    cuenta.saldo -= monto;
+    saldoActualDiv.textContent = cuenta.saldo;
     cuenta.historialMovimientos.push({
-      tipo: "depósito",
+      tipo: "retiro",
       monto: monto,
       saldoActual: cuenta.saldo
     });
+    opcionDiv.innerHTML = `<p>Retiro de saldo exitoso. Su saldo restante es: ${cuenta.saldo}</p>`;
+  } else {
+    opcionDiv.innerHTML = "<p>Saldo insuficiente</p>";
   }
+  modo = "mostrarMenu";
+  mostrarMenu();
+}
 
-  function consultarSaldo() {
-    alert("Su saldo es: " + cuenta.saldo);
-  }
+function mostrarDepositar() {
+  modo = "depositarDinero";
+  opcionDiv.innerHTML = `<input type="number" placeholder="Ingrese el monto a depositar">
+    <button onclick="depositarDinero()">Confirmar Deposito</button>`;
+}
 
-  function salir() {
-    let respuesta;
-    do {
-      respuesta = prompt("¿Seguro que desea salir? Elija 'si' o 'no'.");
-      respuesta = respuesta.toLowerCase(); // Convertir respuesta a minúsculas
-  
-      if (respuesta === "si") {
-        let deposito = cuenta.historialMovimientos.filter(movimiento => movimiento.tipo === "depósito");
-        let retiro = cuenta.historialMovimientos.filter(movimiento => movimiento.tipo === "retiro");
-  
-        let mensaje = "";
-  
-        if (deposito.length > 0) {
-          mensaje += "Historial de depósitos:\n";
-          deposito.forEach(movimiento => {
-            mensaje += "Monto: " + movimiento.monto + " - Saldo Actual: " + movimiento.saldoActual + "\n";
-          });
-        }
-  
-        if (retiro.length > 0) {
-          mensaje += "\nHistorial de retiros:\n";
-          retiro.forEach(movimiento => {
-            mensaje += "Monto: " + movimiento.monto + " - Saldo Actual: " + movimiento.saldoActual + "\n";
-          });
-        }
-  
-        if (mensaje === "") {
-          alert("No hay registros de depósitos o retiros.");
-        } else {
-          alert(mensaje);
-        }
-  
-        return false;
-      } else if (respuesta === "no") {
-        return true;
-      } else {
-        alert("La opción ingresada no es correcta. Por favor, ingrese 'si' o 'no'.");
-      }
-    } while (true);
-  }
+function depositarDinero() {
+  let monto = parseInt(opcionDiv.querySelector("input").value);
+  cuenta.saldo += monto;
+  saldoActualDiv.textContent = cuenta.saldo;
+  cuenta.historialMovimientos.push({
+    tipo: "depósito",
+    monto: monto,
+    saldoActual: cuenta.saldo
+  });
 
-  while (continuar) {
-    mostrarMenu();
-    let opcion = parseInt(prompt("Ingrese una opción"));
+  opcionDiv.innerHTML = `<p>Depósito de saldo exitoso. Su saldo es: ${cuenta.saldo}</p>`;
+  modo = "mostrarMenu";
+  mostrarMenu();
+}
 
-    switch (opcion) {
-      case 1:
-        consultarSaldo();
-        break;
-      case 2:
-        let montoRetiro = parseInt(prompt("Ingrese el monto a retirar"));
-        retirarDinero(montoRetiro);
-        break;
-      case 3:
-        let montoDeposito = parseInt(prompt("Ingrese el monto a depositar"));
-        depositarDinero(montoDeposito);
-        break;
-      case 4:
-        continuar = salir();
-        break;
-      default:
-        alert("Opción inválida");
-        break;
+function consultarSaldo() {
+  alert("Su saldo es: " + cuenta.saldo);
+}
+
+function salir() {
+  let respuesta = confirm("¿Seguro que desea salir?");
+  if (respuesta) {
+    let deposito = cuenta.historialMovimientos.filter(movimiento => movimiento.tipo === "depósito");
+    let retiro = cuenta.historialMovimientos.filter(movimiento => movimiento.tipo === "retiro");
+
+    let mensaje = "";
+
+    if (deposito.length > 0) {
+      mensaje += "Historial de depósitos:\n";
+      deposito.forEach(movimiento => {
+        mensaje += "Monto: " + movimiento.monto + " - Saldo Actual: " + movimiento.saldoActual + "\n";
+      });
     }
-  }
 
-  let deposito = cuenta.historialMovimientos.filter(movimiento => movimiento.tipo === "depósito");
-  console.log(deposito);
-} else {
-  alert("Contraseña incorrecta");
+    if (retiro.length > 0) {
+      mensaje += "\nHistorial de retiros:\n";
+      retiro.forEach(movimiento => {
+        mensaje += "Monto: " + movimiento.monto + " - Saldo Actual: " + movimiento.saldoActual + "\n";
+      });
+    }
+
+    if (mensaje === "") {
+      alert("No hay registros de depósitos o retiros.");
+    } else {
+      alert(mensaje);
+    }
+
+    location.reload(); // Recargar la página para volver al HTML original
+  } else {
+    return true;
+  }
+}
+
+function validarContraseña() {
+  let contraseña = parseInt(passwordInput.value);
+  if (contraseña === cuenta.contraseña) {
+    alert("Contraseña correcta");
+    mostrarMenu();
+    document.querySelector(".display").style.display = "block";
+    saldoAnteriorDiv.textContent = "Saldo anterior: " + cuenta.saldo;
+    saldoActualDiv.textContent = cuenta.saldo;
+  } else {
+    alert("Contraseña incorrecta");
+  }
+  passwordInput.value = "";
+}
+
+function handleOpcion() {
+  let opcion = parseInt(document.getElementById("opcion-input").value);
+  switch (opcion) {
+    case 1:
+      consultarSaldo();
+      break;
+    case 2:
+      mostrarRetirar();
+      break;
+    case 3:
+      mostrarDepositar();
+      break;
+    case 4:
+      continuar = salir();
+      break;
+    default:
+      alert("Opción inválida");
+      break;
+  }
+  document.getElementById("opcion-input").value = "";
+}
+
+// Evento de clic para los botones del teclado
+let buttons = document.getElementsByClassName("numero");
+for (let i = 0; i < buttons.length; i++) {
+  buttons[i].addEventListener("click", function () {
+    let value = this.textContent;
+
+    // Comprobar el modo actual del programa
+    switch (modo) {
+      case "ingresoContraseña":
+        switch (value) {
+          case "Salir":
+            continuar = salir();
+            break;
+          case "Enter":
+            validarContraseña();
+            break;
+          case "Borrar":
+            passwordInput.value = passwordInput.value.slice(0, -1);
+            break;
+          default:
+            passwordInput.value += value;
+            break;
+        }
+        break;
+      case "mostrarMenu":
+        switch (value) {
+          case "1":
+            consultarSaldo();
+            break;
+          case "2":
+            mostrarRetirar();
+            break;
+          case "3":
+            mostrarDepositar();
+            break;
+          case "Salir":
+            continuar = salir();
+            break;
+          case "Borrar":
+            passwordInput.value = passwordInput.value.slice(0, -1);
+            break;
+          default:
+            passwordInput.value += value;
+            break;
+        }
+        break;
+      case "retirarDinero":
+        // Acciones para el modo "retirarDinero" cuando se presionan los botones
+        switch (value) {
+          case "Salir":
+            continuar = salir();
+            break;
+          case "Enter":
+            retirarDinero();
+            break;
+          case "Borrar":
+            let input = opcionDiv.querySelector("input");
+            input.value = input.value.slice(0, -1);
+            break;
+          default:
+            opcionDiv.querySelector("input").value += value;
+            break;
+        }
+        break;
+
+      case "depositarDinero":
+        // Acciones para el modo "depositarDinero" cuando se presionan los botones
+        switch (value) {
+          case "Salir":
+            continuar = salir();
+            break;
+          case "Enter":
+            depositarDinero();
+            break;
+          case "Borrar":
+            let input = opcionDiv.querySelector("input");
+            input.value = input.value.slice(0, -1);
+            break;
+          default:
+            opcionDiv.querySelector("input").value += value;
+            break;
+        }
+        break;
+
+    }
+  });
 }
