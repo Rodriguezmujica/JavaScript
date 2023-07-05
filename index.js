@@ -13,11 +13,14 @@ let modo = "ingresoContraseña";
 function mostrarMenu() {
   modo = "mostrarMenu"; // Cambiar el modo a "mostrarMenu"
   opcionDiv.innerHTML = `
-      <li>
+      <ul>
           <li class="menus">1-Consultar saldo</li>
           <li class="menus">2-Retirar dinero</li>
           <li class="menus">3-Depositar dinero</li>
         </ul>  `;
+}
+function regresarMenu() {
+  mostrarMenu();
 }
 
 function ocultarMenu() {
@@ -42,18 +45,24 @@ function retirarDinero() {
       monto: monto,
       saldoActual: cuenta.saldo
     });
-    opcionDiv.innerHTML = `<p>Retiro de saldo exitoso. Su saldo restante es: ${cuenta.saldo}</p>`;
+    opcionDiv.innerHTML = 
+    `<p>Retiro de saldo exitoso. Su saldo restante es: ${cuenta.saldo}</p>
+    <button onclick="mostrarMenu()">Aceptar</button>`;
+    modo = "aceptarRetiro";
   } else {
-    opcionDiv.innerHTML = "<p>Saldo insuficiente</p>";
+    opcionDiv.innerHTML = `<p>Saldo insuficiente</p>
+    <button onclick="mostrarMenu()">Aceptar</button>`;
+    modo = "aceptarRetiro";
+  
   }
-  modo = "mostrarMenu";
-  mostrarMenu();
+
 }
 
 function mostrarDepositar() {
   modo = "depositarDinero";
   opcionDiv.innerHTML = `<input type="number" placeholder="Ingrese el monto a depositar">
-    <button onclick="depositarDinero()">Confirmar Deposito</button>`;
+    <button onclick="depositarDinero()">Confirmar Deposito</button>`
+     ;
 }
 
 function depositarDinero() {
@@ -66,9 +75,10 @@ function depositarDinero() {
     saldoActual: cuenta.saldo
   });
 
-  opcionDiv.innerHTML = `<p>Depósito de saldo exitoso. Su saldo es: ${cuenta.saldo}</p>`;
-  modo = "mostrarMenu";
-  mostrarMenu();
+  opcionDiv.innerHTML = `<p>Depósito de saldo exitoso. Su saldo es: ${cuenta.saldo}</p>
+  <button onclick="mostrarMenu()">Aceptar</button>`
+ modo = aceptarRetiro ;
+ 
 }
 
 function consultarSaldo() {
@@ -112,16 +122,20 @@ function salir() {
 function validarContraseña() {
   let contraseña = parseInt(passwordInput.value);
   if (contraseña === cuenta.contraseña) {
-    alert("Contraseña correcta");
-    mostrarMenu();
     document.querySelector(".display").style.display = "block";
     saldoAnteriorDiv.textContent = "Saldo anterior: " + cuenta.saldo;
     saldoActualDiv.textContent = cuenta.saldo;
+    opcionDiv.innerHTML = `
+      <p>Contraseña correcta</p>
+      <button onclick="mostrarMenu()">Aceptar</button>`;
   } else {
-    alert("Contraseña incorrecta");
+    opcionDiv.innerHTML = `
+      <p>Contraseña incorrecta</p>
+      <button onclick="mostrarMenu()">Aceptar</button>`;
   }
   passwordInput.value = "";
 }
+
 
 function handleOpcion() {
   let opcion = parseInt(document.getElementById("opcion-input").value);
@@ -159,7 +173,9 @@ for (let i = 0; i < buttons.length; i++) {
             continuar = salir();
             break;
           case "Enter":
-            validarContraseña();
+            if (passwordInput.value !== "") {
+              validarContraseña();
+            }
             break;
           case "Borrar":
             passwordInput.value = passwordInput.value.slice(0, -1);
@@ -171,6 +187,9 @@ for (let i = 0; i < buttons.length; i++) {
         break;
       case "mostrarMenu":
         switch (value) {
+          case "enter":
+            mostrarMenu()
+            break;
           case "1":
             consultarSaldo();
             break;
@@ -227,7 +246,27 @@ for (let i = 0; i < buttons.length; i++) {
             opcionDiv.querySelector("input").value += value;
             break;
         }
-        break;
+        case "aceptarDeposito":
+          switch (value) {
+            case "enter":
+              mostrarMenu();
+              break;
+            case "Salir":
+              continuar = salir();
+              break;
+          }
+          break;
+        
+        case "aceptarRetiro":
+          switch (value) {
+            case "enter":
+              regresarMenu();
+              break;
+            case "Salir":
+              continuar = salir();
+              break;
+          }
+          break;
 
     }
   });
