@@ -21,6 +21,11 @@ let opcionDiv = document.getElementById("opcion-div");
 let saldoAnteriorDiv = document.getElementById("saldo-anterior");
 let modo = "ingresoContraseña";
 
+// Cargar datos del localStorage al inicio
+cargarDatosLocalStorage();
+
+
+
 function mostrarMenu() {
   modo = "mostrarMenu";
   opcionDiv.innerHTML = `
@@ -54,13 +59,12 @@ function retirarDinero() {
       monto: monto,
       saldoActual: usuarioActual.saldo
     });
+    guardarDatosLocalStorage(); // Guardar los datos actualizados en el localStorage
     opcionDiv.innerHTML = `
       <p>Retiro de saldo exitoso. Su saldo restante es: ${usuarioActual.saldo}</p>`;
-   
   } else {
     opcionDiv.innerHTML = `
       <p>Saldo insuficiente</p>`;
-  
   }
   modo = "gracias";
 }
@@ -82,8 +86,8 @@ function depositarDinero() {
     monto: monto,
     saldoActual: usuarioActual.saldo
   });
-aceptarDeposito();
-
+  guardarDatosLocalStorage(); // Guardar los datos actualizados en el localStorage
+  aceptarDeposito();
 }
 
 function aceptarDeposito() {
@@ -96,42 +100,53 @@ function aceptarDeposito() {
 
 
 function consultarSaldo() {
-  alert("Su saldo es: " + usuarioActual.saldo);
+  opcionDiv.innerHTML = `
+    <p>Su saldo es: ${usuarioActual.saldo}</p>`;
+  modo = "gracias";
 }
 
 function salir() {
-  let respuesta = confirm("¿Seguro que desea salir?");
-  if (respuesta) {
-    let deposito = usuarioActual.historialMovimientos.filter(movimiento => movimiento.tipo === "depósito");
-    let retiro = usuarioActual.historialMovimientos.filter(movimiento => movimiento.tipo === "retiro");
+  modo = "alrevez";
+  let deposito = usuarioActual.historialMovimientos.filter(movimiento => movimiento.tipo === "depósito");
+  let retiro = usuarioActual.historialMovimientos.filter(movimiento => movimiento.tipo === "retiro");
+  let confirmacionHTML;
+  let mensaje = "";
 
-    let mensaje = "";
-
-    if (deposito.length > 0) {
-      mensaje += "Historial de depósitos:\n";
-      deposito.forEach(movimiento => {
-        mensaje += "Monto: " + movimiento.monto + " - Saldo Actual: " + movimiento.saldoActual + "\n";
-      });
-    }
-
-    if (retiro.length > 0) {
-      mensaje += "\nHistorial de retiros:\n";
-      retiro.forEach(movimiento => {
-        mensaje += "Monto: " + movimiento.monto + " - Saldo Actual: " + movimiento.saldoActual + "\n";
-      });
-    }
-
-    if (mensaje === "") {
-      alert("No hay registros de depósitos o retiros.");
-    } else {
-      alert(mensaje);
-    }
-
-    location.reload(); // Recargar la página para volver al HTML original
-  } else {
-    return true;
+  if (deposito.length > 0) {
+    mensaje += "Historial de depósitos:<br>";
+    deposito.forEach(movimiento => {
+      mensaje += "Monto: " + movimiento.monto + " - Saldo Actual: " + movimiento.saldoActual + "<br>";
+    });
   }
+
+  if (retiro.length > 0) {
+    mensaje += "<br>Historial de retiros:<br>";
+    retiro.forEach(movimiento => {
+      mensaje += "Monto: " + movimiento.monto + " - Saldo Actual: " + movimiento.saldoActual + "<br>";
+    });
+  }
+
+  if (mensaje === "") {
+    confirmacionHTML = `<p>¿Seguro que desea salir?</p> 
+      <p>No hay registros de depósitos o retiros.</p>`;
+  } else {
+    confirmacionHTML = `
+    <p>¿Seguro que desea salir?</p> 
+      <p>${mensaje}</p>`;
+  }
+
+  opcionDiv.innerHTML = confirmacionHTML;
+  guardarDatosLocalStorage();
 }
+
+function confirmarSalida() {
+  location.reload();
+}
+
+function cancelarSalida() {
+  mostrarMenu();
+}
+
 
 
 
@@ -162,6 +177,16 @@ function mostrarMensajeContraseñaIncorrecta() {
   opcionDiv.innerHTML = `
     <p>Contraseña incorrecta</p>`;
   modo = "mal"
+}
+
+function cargarDatosLocalStorage() {
+  if (localStorage.getItem("cuentas")) {
+    cuentas = JSON.parse(localStorage.getItem("cuentas"));
+  }
+}
+
+function guardarDatosLocalStorage() {
+  localStorage.setItem("cuentas", JSON.stringify(cuentas));
 }
 
 // Evento de clic para los botones del teclado
@@ -267,6 +292,18 @@ for (let i = 0; i < buttons.length; i++) {
           case "Enter":
             location.reload();
         }
-    }
-  });
-}
+        case "alrevez":
+          switch (value) {
+            case "Enter":
+              confirmarSalida();
+              break;
+            case "Salir":
+              cancelarSalida();
+              break;
+            default:
+              break;
+          }
+          break;
+      }
+    });
+  }
