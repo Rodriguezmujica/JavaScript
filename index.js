@@ -26,13 +26,18 @@ cargarDatosLocalStorage();
 
 
 
+
+
 function mostrarMenu() {
   modo = "mostrarMenu";
   opcionDiv.innerHTML = `
+  
+  <h1>Selecione una opcion</h1>
     <ul>
       <li class="menus">1-Consultar saldo</li>
       <li class="menus">2-Retirar dinero</li>
       <li class="menus">3-Depositar dinero</li>
+      <li class="menus">4-Consultar en dolares</li>
     </ul>`;
 }
 
@@ -43,8 +48,9 @@ function ocultarMenu() {
 function mostrarRetirar() {
   modo = "retirarDinero";
   opcionDiv.innerHTML = `
-    <input type="number" placeholder="Ingrese el monto a retirar">
-    <button onclick="retirarDinero()">Confirmar Retiro</button>
+  <h2>Ingrese el monto a retirar</h2>
+    <input class="input" type="number" >
+    <p class="continuar">Presione el boton <span class="verde">Verde</span> para continuar</p>
   `;
 }
 
@@ -61,10 +67,12 @@ function retirarDinero() {
     });
     guardarDatosLocalStorage(); // Guardar los datos actualizados en el localStorage
     opcionDiv.innerHTML = `
-      <p>Retiro de saldo exitoso. Su saldo restante es: ${usuarioActual.saldo}</p>`;
+      <h2>Retiro de saldo exitoso.<br> Su saldo restante es: <span class="verde"> ${usuarioActual.saldo}</span></h2>
+      <p class="continuar">Presione el boton <span class="verde">Verde</span> para continuar</p>`;
   } else {
     opcionDiv.innerHTML = `
-      <p>Saldo insuficiente</p>`;
+      <h2 class="rojo">Saldo insuficiente</h2>
+      <p class="continuar">Presione el boton <span class="verde">Verde</span> para continuar</p>`;
   }
   modo = "gracias";
 }
@@ -72,8 +80,9 @@ function retirarDinero() {
 function mostrarDepositar() {
   modo = "depositarDinero";
   opcionDiv.innerHTML = `
-    <input type="number" placeholder="Ingrese el monto a depositar">
-    `;
+  <h2>Ingrese el monto a depositar.</h2>
+    <input class="input" type="number">
+    <p class="continuar">Presione el boton <span class="verde">Verde</span> para continuar</p>`;
 
 }
 
@@ -93,7 +102,8 @@ function depositarDinero() {
 function aceptarDeposito() {
 
   opcionDiv.innerHTML = 
-  `<p>Depósito de saldo exitoso. Su saldo es: ${usuarioActual.saldo}</p>`;
+  `<h3>Depósito de saldo exitoso. Su saldo es: ${usuarioActual.saldo}</h3>
+  <p class="continuar">Presione el boton <span class="verde">Verde</span> para continuar</p>`;
   modo = "gracias";
     
 }
@@ -101,8 +111,39 @@ function aceptarDeposito() {
 
 function consultarSaldo() {
   opcionDiv.innerHTML = `
-    <p>Su saldo es: ${usuarioActual.saldo}</p>`;
+    <h1>Su saldo es: ${usuarioActual.saldo} CLP</h1>
+    <p class="continuar">Presione el boton <span class="verde">Verde</span> para continuar</p>`;
   modo = "gracias";
+}
+
+function solicitarMontoConversion() {
+  modo = "divisas";
+  opcionDiv.innerHTML = `
+  <h2>Ingrese el monto en pesos a convertir en dolares</h2>
+    <input class="input" type="number" id="conversion-input" step="0.01">   
+    <p class="continuar">Presione el boton <span class="verde">Verde</span> para continuar</p> `;
+}
+
+function realizarConversion() {
+  modo = "gracias";
+  const conversionInput = document.getElementById('conversion-input');
+  const amount = parseFloat(conversionInput.value);
+
+  const url = `https://v6.exchangerate-api.com/v6/0de7b341cf0080c4650116be/pair/CLP/USD/${amount}`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      const convertedAmount = data.conversion_result;
+      const formattedAmount = convertedAmount.toFixed(2);
+
+      opcionDiv.innerHTML = `
+        <h2>El monto convertido a dolar es:<span class="verde"> $${formattedAmount} </span></h2>
+        <p class="continuar">Presione el boton <span class="verde">Verde</span> para continuar</p>`;
+    })
+    .catch(error => {
+      console.log('Error:', error);
+    });
 }
 
 function salir() {
@@ -169,13 +210,16 @@ function validarContraseña() {
 
 function mostrarMensajeContraseñaCorrecta() {
   opcionDiv.innerHTML = `
-    <p>Contraseña correcta</p>`;
+    <h1>Contraseña correcta</h1>
+   <div></div>
+    <p class="continuar">Presione el boton <span class="verde">Verde</span> para continuar</p>`;
   modo = "gracias";
 }
 
 function mostrarMensajeContraseñaIncorrecta() {
   opcionDiv.innerHTML = `
-    <p>Contraseña incorrecta</p>`;
+    <h2 class="rojo">Contraseña incorrecta</h2>
+    <p class="continuar">Presione el boton <span class="verde">Verde</span> para continuar</p>`;
   modo = "mal"
 }
 
@@ -229,6 +273,9 @@ for (let i = 0; i < buttons.length; i++) {
           case "3":
             mostrarDepositar();
             break;
+            case "4":
+              solicitarMontoConversion(); // Llama a la función para solicitar el monto a convertir
+              break;
           case "Salir":
             continuar = salir();
             break;
@@ -304,6 +351,23 @@ for (let i = 0; i < buttons.length; i++) {
               break;
           }
           break;
+          case "divisas":
+           switch (value) {
+              case "Salir":
+                continuar = salir();
+                break;
+              case "Enter":
+                realizarConversion();
+                break;
+              case "Borrar":
+                let input = opcionDiv.querySelector("input");
+                input.value = input.value.slice(0, -1);
+                break;
+              default:
+                opcionDiv.querySelector("input").value += value;
+                break;
+            }
+            break;
       }
     });
   }

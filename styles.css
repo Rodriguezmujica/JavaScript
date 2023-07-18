@@ -2,7 +2,19 @@
     padding: 0;
     margin: 0;
 }
+h2 {
+    font-size: 48px;
+    color: rgb(255, 246, 246);
+    text-align: center;
+    margin-bottom: 20px;
+}
 
+h3 {
+    font-size: 31px;
+    color: rgb(255, 246, 246);
+    text-align: center;
+    margin-bottom: 20px;
+}
 body {
     background-color: #ADADAD;
 }
@@ -59,10 +71,10 @@ button:active {
 }
 
 .display h1 {
-    font-size: 2em;
+    font-size: 3em;
     color: rgb(255, 246, 246);
     text-align: center;
-
+    margin-bottom: 10px;
     
 }
 
@@ -83,6 +95,15 @@ input {
     padding: 8px;
     border-radius: 4px;
   }
+
+  .input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    font-size: 33px;
+    margin-bottom: 20px;
+  }
 .borrar {
     background-color: yellow;
 }
@@ -92,5 +113,49 @@ input {
     display: flex;
     text-align: center;
     flex-direction: column;
-    font-size: 60px;
+    font-size: 45px;
 }
+
+.verde {
+    color: green;
+  }
+
+  .rojo {
+    color: red;
+  }
+
+.continuar {
+    font-size: 2em;
+    color: rgb(255, 246, 246);
+    text-align: center;
+    margin-bottom: 20px;
+}
+.logo {
+   
+    width: 100px;
+}
+
+.button {
+    grid-column: 1 / span 4;
+    grid-row: 6;
+    font-size: 16px;
+    padding: 1em 3.3em;
+    transform: perspective(200px) rotateX(15deg);
+    color: white;
+    font-weight: 900;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(0deg, rgba(63,94,251,1) 0%, rgba(70,135,252,1) 100%);
+    box-shadow: rgba(63,94,251,0.2) 0px 40px 29px 0px;
+    will-change: transform;
+    transition: all 0.3s;
+    border-bottom: 2px solid rgba(70,135,252,1);
+  }
+  
+  .button:hover {
+    transform: perspective(180px) rotateX(30deg) translateY(2px);
+  }
+  
+  .button:active {
+    transform: perspective(170px) rotateX(36deg) translateY(5px);
+  }
