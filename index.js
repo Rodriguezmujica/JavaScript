@@ -371,3 +371,9 @@ for (let i = 0; i < buttons.length; i++) {
       }
     });
   }
+
+function moverTarjeta() {
+  var div = document.getElementById('creditCard');
+  div.classList.add('movedCreditCard');
+  div.style.bottom = "-100px";
+}

@@ -14,25 +14,50 @@
 </head>
 
 <body>
-   
+
     <div class="contenedor">
+        <div id="creditCard" class="credit-card-wrap">
+            <div class="mk-icon-world-map"></div>
+            <div class="credit-card-inner">
+                <header class="header">
+                    <div class="credit-logo">
+                        <div class="shape"><span class="txt">PB</span></div> <span class="text">Bancoder</span>
+                    </div>
+                </header>
+                <div class="mk-icon-sim"></div>
+                <div class="credit-font credit-card-number" data-text="4716">4716 6109 5211 3010</div>
+                <footer class="footer">
+                    <div class="clearfix">
+                        <div class="pull-left">
+                            <div class="credit-card-date"><span class="title">Expires End</span><span
+                                    class="credit-font">01/25</span></div>
+                            <div class="credit-font credit-author">MOHAN PEREZ</div>
+                        </div>
+                        <div class="pull-right">
+                            <div class="mk-icon-visa"></div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
         <div class="calculadora">
-            <div id="opcion-div" class="display"> 
-             
 
-                <h1  class="cambiar">Bienvenido a Bancoder</h1>
-                
-                    <input type="password" id="password-input" placeholder="Ingrese contraseña">
+            <div id="opcion-div" class="display">
 
-                    <p class="continuar">Presione el boton <span class="verde">Verde</span> para continuar</p>
-                                  
+
+                <h1 class="cambiar">Bienvenido a Bancoder</h1>
+
+                <input type="password" id="password-input" placeholder="Ingrese contraseña">
+
+                <p class="continuar">Presione el boton <span class="verde">Verde</span> para continuar</p>
+
                 <div id="saldo-anterior"></div>
                 <div id="monto-div"></div>
                 <div id="saldo-actual"></div>
                 <div id="menu-div">
-                   
+
                 </div>
-           
+
             </div>
 
             <button class="numero">1</button>
@@ -50,15 +75,24 @@
             <button class="numero">Retroceder</button>
             <button class="col-2 numero">0</button>
             <button class="numero">Avanzar</button>
-            <button class="button"> ingrese tarjeta
-            </button>
+
         </div>
+        <div class="ranura-wrapper">
+            <div class="ranura-container">
+                <div class="cobertura-ranura"></div>
+                <div class="ranura">
+
+                </div>
+            </div>
+            <div><button onclick="moverTarjeta()">ingresar tarjeta</button></div>
+        </div>
+
     </div>
     </div>
 
 
     <script src="./index.js"></script>
-<script src="
+    <script src="
 https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.all.min.js
 "></script>
 </body>
