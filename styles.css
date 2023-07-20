@@ -33,19 +33,56 @@ body {
     background-color: #53586B;
     padding: 34px;
   }
+ 
+.numero1 {
+    --key-text-color: #969faf;
+    --docsearch-key-shadow: inset 0 -2px 0 0 #cdcde6,inset 0 0 1px 1px #fff,0 1px 2px 1px rgba(30,35,90,0.4);
+    --docsearch-key-gradient: linear-gradient(-225deg,#d5dbe4,#f8f8f8);
 
-.numero{
-    cursor: pointer;
-    margin:  5px;
-    padding: 0;
-    border-radius: 32px;
-    font-size: 1.5em;
-    border: none;
-    background-color: rgb(255, 241, 241);
-    box-shadow: 5px 5px 10px -3px black;
-
+    background: var(--docsearch-key-gradient);
+    border-radius: 3px;
+    box-shadow: var(--docsearch-key-shadow);
+    color: var(--key-text-color);
+    height: 6.5em;
+    text-align: center;
+    padding: 0.6em;
+    margin: 0 0.6em;
+    display: inline-block;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1em;
+    min-width: 1em;
+    line-height: 1em;
+    user-select: none;
+    z-index: 9999;
+     position: absolute;
 }
 
+.numero{
+    --key-text-color: #969faf;
+    --docsearch-key-shadow: inset 0 -2px 0 0 #cdcde6,inset 0 0 1px 1px #fff,0 1px 2px 1px rgba(30,35,90,0.4);
+    --docsearch-key-gradient: linear-gradient(-225deg,#d5dbe4,#f8f8f8);
+
+    background: var(--docsearch-key-gradient);
+    border-radius: 3px;
+    box-shadow: var(--docsearch-key-shadow);
+    color: var(--key-text-color);
+    height: 6.5em;
+    text-align: center;
+    padding: 0.6em;
+    margin: 0 0.6em;
+    display: inline-block;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1em;
+    min-width: 1em;
+    line-height: 1em;
+    user-select: none;
+    }
+    .enter {
+        grid-row: span 2;
+       background: linear-gradient(-225deg, #4CAF50, #252825) !important;
+            }
 button:active {
     background-color: rgb(95, 95, 73);
 }
@@ -80,12 +117,9 @@ button:active {
 
 
 .salir {
-    background-color: red;
+   --docsearch-key-gradient: linear-gradient(-225deg,#9b1414,#650c0c);
 }
-.enter {
-    grid-row: span 2;
-    background-color: green;
-}
+
 
 input {
     font-size: 16px;
@@ -105,7 +139,7 @@ input {
     margin-bottom: 20px;
   }
 .borrar {
-    background-color: yellow;
+   --docsearch-key-gradient: linear-gradient(-225deg,#e0d20b,#848b03);
 }
 
 .menus {
@@ -219,11 +253,11 @@ input {
 }
 
 .cobertura-ranura {
-    height: 90%;
-    width: 400px;
+    height: 88%;
+    width: 500px;
     background-color: #ADADAD;
     z-index: 3;
-    border-bottom: 10px solid black;
+    border-bottom: 7px solid black;
 }
 
 .ranura-wrapper {
@@ -233,7 +267,7 @@ input {
 
 }
   .ranura {
-    width: 400px;
+    width: 500px;
     height: 10%;
     border: 5px solid black;
     z-index: 1;

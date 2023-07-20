@@ -30,7 +30,8 @@ cargarDatosLocalStorage();
 
 function mostrarMenu() {
   modo = "mostrarMenu";
-  opcionDiv.innerHTML = `
+  opcionDiv.innerHTML = 
+  `
   
   <h1>Selecione una opcion</h1>
     <ul>
