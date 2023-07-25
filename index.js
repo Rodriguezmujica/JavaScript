@@ -1,3 +1,17 @@
+function inicio() {
+  Swal.fire({
+    title: 'Por favor Ingrese su tarjeta.',
+    showClass: {
+      popup: 'animate__animated animate__fadeInDown'
+    },
+    hideClass: {
+      popup: 'animate__animated animate__fadeOutUp'
+    },
+    didClose: moverTarjeta // Llamamos a moverTarjeta cuando se cierra SweetAlert2
+  });
+}
+window.onload = inicio;
+
 let cuentas = [
   {
     usuario: "usuario1",
@@ -244,8 +258,8 @@ for (let i = 0; i < buttons.length; i++) {
     switch (modo) {
       case "ingresoContraseña":
         switch (value) {
-          case "Salir":
-            continuar = salir();
+          case "Salir": // Agregar esta condición para el botón "Salir"
+            passwordInput.value = ""; // Borrar todo lo escrito
             break;
           case "Enter":
             if (passwordInput.value !== "") {
