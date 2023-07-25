@@ -169,26 +169,28 @@ function salir() {
   let mensaje = "";
 
   if (deposito.length > 0) {
-    mensaje += "Historial de depósitos:<br>";
+    mensaje += "<p>Historial de depósitos:</p>";
     deposito.forEach(movimiento => {
-      mensaje += "Monto: " + movimiento.monto + " - Saldo Actual: " + movimiento.saldoActual + "<br>";
+      mensaje += "<p>Monto: " + movimiento.monto + " - Saldo Actual: " + movimiento.saldoActual + "<br></p>";
     });
   }
 
   if (retiro.length > 0) {
-    mensaje += "<br>Historial de retiros:<br>";
+    mensaje += "<p>Historial de retiros:</p>";
     retiro.forEach(movimiento => {
-      mensaje += "Monto: " + movimiento.monto + " - Saldo Actual: " + movimiento.saldoActual + "<br>";
+      mensaje += "<p>Monto: " + movimiento.monto + " - Saldo Actual: " + movimiento.saldoActual + "<br></p>";
     });
   }
 
   if (mensaje === "") {
-    confirmacionHTML = `<p>¿Seguro que desea salir?</p> 
-      <p>No hay registros de depósitos o retiros.</p>`;
+    confirmacionHTML = `<h1>¿Seguro que desea salir?</h1> 
+      <h3>No hay registros de depósitos o retiros.</h3>
+      <p>Presiona el boton <span class="verde">verde</span> para salir o el boton <span class="rojo">rojo</span> para volver al menu </p>`;
   } else {
     confirmacionHTML = `
-    <p>¿Seguro que desea salir?</p> 
-      <p>${mensaje}</p>`;
+    <h1>¿Seguro que desea salir?</h1> 
+      <p>${mensaje}</p>
+      <p>Presiona el boton <span class="verde">verde</span> para salir o el boton <span class="rojo">rojo</span> para volver al menu </p>`;
   }
 
   opcionDiv.innerHTML = confirmacionHTML;
